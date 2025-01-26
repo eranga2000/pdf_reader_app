@@ -10,8 +10,11 @@ class HomeViewModel extends ChangeNotifier {
 
   // Fetch PDFs from device
   Future<void> fetchPDFs() async {
-    _pdfList = await _pdfService.getAllPDFs();
-    notifyListeners();
+    // Ensure you fetch only once and avoid unnecessary calls
+    if (_pdfList.isEmpty) {
+      _pdfList = await _pdfService.getAllPDFs();
+      notifyListeners(); // Notify listeners after fetching PDFs
+    }
   }
 
   // Filter PDFs (you can add custom filtering logic here)
@@ -19,6 +22,6 @@ class HomeViewModel extends ChangeNotifier {
     _pdfList = _pdfList
         .where((pdf) => pdf.title.toLowerCase().contains(query.toLowerCase()))
         .toList();
-    notifyListeners();
+    notifyListeners(); // Notify listeners after filtering
   }
 }
